@@ -1,11 +1,13 @@
 # python-setuptools
 Example Project for Learning Building and Distributing Python Packages.
 
-# Name of the packge craeted by setup.py is rahulg
+- Name of the packge craeted by setup.py is `rahulg`
 
-#To install this packeg for local use
-`pip install .`
-#To test 
+- To install this packeg for local testing:
+
+* `pip install .`
+* open python shell.
+
 ```
 (venv) ➜  python-setuptools git:(master) ✗ python
 Python 2.7.16 (default, Dec  3 2019, 07:02:07) 
