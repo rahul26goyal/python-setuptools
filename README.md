@@ -45,3 +45,18 @@ rahulg/                          rahulg_test_tool-0.1.dist-info/
   ```
 
 ### To create a wheel distribution:
+```
+ python setup.py bdist_wheel --universal
+ ```
+ 
+ This will create a `<package-name>-<>.whl` file inside `dist` which can be uploaded to pypi or installed.
+ 
+ To Install the wheel:
+ ```
+ (venv) ➜ pip install ./dist/rahulg_test_tool-0.1-py2.py3-none-any.whl 
+ 
+DEPRECATION: Python 2.7 reached the end of its life on January 1st, 2020. Please upgrade your Python as Python 2.7 is no longer maintained. A future version of pip will drop support for Python 2.7. More details about Python 2 support in pip, can be found at https://pip.pypa.io/en/latest/development/release-process/#python-2-support
+Processing ./dist/rahulg_test_tool-0.1-py2.py3-none-any.whl
+Installing collected packages: rahulg-test-tool
+Successfully installed rahulg-test-tool-0.1
+```
