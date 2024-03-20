@@ -1,0 +1,29 @@
+# pyproject.toml
+
+[build-system]
+requires = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name="rahulg_package" # this is the name of the package with which users will install this library.
+authors = [
+    {name = "Rahul Goyal", email = "goyal.1234rahul@gmail.com"},
+]
+description = "My test package which builds usuing setuptools"
+readme = "README.md"
+requires-python = ">=3.7"
+keywords = ["one", "two"]
+license = {text = "BSD-3-Clause"}
+classifiers = [
+    "Framework :: Setuptools",
+    "Programming Language :: Python :: 3",
+]
+dependencies = [
+    "requests",
+    'importlib-metadata; python_version<"3.10"',
+]
+version = "1.1"
+
+[project.optional-dependencies]
+dev = []
+tests= []
