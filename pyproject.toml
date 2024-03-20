@@ -15,14 +15,22 @@ requires-python = ">=3.7"
 keywords = ["one", "two"]
 license = {text = "BSD-3-Clause"}
 classifiers = [
-    "Framework :: Setuptools",
-    "Programming Language :: Python :: 3",
-]
+    "Programming Language :: Python :: 3", ]
 dependencies = [
     "requests",
-    'importlib-metadata; python_version<"3.10"',
-]
-version = "1.1"
+    'importlib-metadata; python_version<"3.10"', ]
+version = "1.2"
+
+[tool.setuptools]
+# if you dont specify anything, the current directoy will be scannld for `src` / other folder where it an find packages.
+# it will throw error: Multiple top-level packages discovered in a flat-layout: ['rahulg', 'rahulg_ext']. if found.
+#packages = [""] # configuration error: `tool.setuptools.packages` must be valid exactly by one definition (0 matches found):
+# packages = ["src"] # this will throw directory does not exists error
+#packages = ["rahulg"] # this will include only packges present within the rahulg directory excluding the nexted ones
+packages = ["rahulg", "rahulg.nested"]  # add add the nexted packageswhich needs to be included.
+
+#[tool.setuptools.packages.find]
+
 
 [project.optional-dependencies]
 dev = []
