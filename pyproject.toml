@@ -1,0 +1,37 @@
+# pyproject.toml
+
+[build-system]
+requires = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name="rahulg_package" # this is the name of the package with which users will install this library.
+authors = [
+    {name = "Rahul Goyal", email = "goyal.1234rahul@gmail.com"},
+]
+description = "My test package which builds usuing setuptools"
+readme = "README.md"
+requires-python = ">=3.7"
+keywords = ["one", "two"]
+license = {text = "BSD-3-Clause"}
+classifiers = [
+    "Programming Language :: Python :: 3", ]
+dependencies = [
+    "requests",
+    'importlib-metadata; python_version<"3.10"', ]
+version = "1.2"
+
+[tool.setuptools]
+# if you dont specify anything, the current directoy will be scannld for `src` / other folder where it an find packages.
+# it will throw error: Multiple top-level packages discovered in a flat-layout: ['rahulg', 'rahulg_ext']. if found.
+#packages = [""] # configuration error: `tool.setuptools.packages` must be valid exactly by one definition (0 matches found):
+# packages = ["src"] # this will throw directory does not exists error
+#packages = ["rahulg"] # this will include only packges present within the rahulg directory excluding the nexted ones
+packages = ["rahulg", "rahulg.nested"]  # add add the nexted packageswhich needs to be included.
+
+#[tool.setuptools.packages.find]
+
+
+[project.optional-dependencies]
+dev = []
+tests= []

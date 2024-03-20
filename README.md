@@ -1,9 +1,29 @@
-# python-setuptools
+## Building and Publishing a Python libray on pypi 
+- We will use `setuptools` for generating the source and binary distribution for the package. 
+- We will use `pyproject.toml` to specify all the build related metadata and define the build system
+- We will use `twine` to upload to test pypi repository.
 
-Example Project for Learning Building and Distributing Python Packages.
+We will follow this guide https://setuptools.pypa.io/en/latest/userguide/quickstart.html 
+for this tutorial.
 
-- Name of the distribution craeted by setup.py is `rahulg-test-tool`
-- name of the package to be used is `rahulg` as specified in setup.py #packages
+## Creating the test env
+```python
+conda create -n  setuptool-dev python=3.8
+conda activate setuptool-dev
+```
+
+**Overview of the project structute**
+
+This is a simpel package which contains all the code under a single 
+source directory names `rahulg` which follows the flat-src project structure. 
+- the folder `rahulg` is the base package for this project. 
+- Under `rahulg` folder, there are other packages like `nested`. It can be named anything. 
+- Under `nested` package, we have added another package names `inner`. It can be name anything.
+
+
+- Name of the package distribution created will be `rahulg_package` used for installation
+- name of the package to be used in code for importing is `rahulg`.
+
 ### To install this package for local testing:
 * create a virtual env `venv`
 * `pip install .`
@@ -28,121 +48,89 @@ you have invoked a nested module...
 >>>
 ```
 
-### To install the package directly from git repo:
+**Create `pyproject.toml` file**
+- create a file 
+- define the build system 
+- define the project basic details
+- define the source code to be included
+- define the depedencies to be install with the package
+The idea is to not have any `setup.py` or `setup.cfg` file on this tutorial.
 
+**Install the python `build` utility**
 ```
-pip install git+https://github.com/rahul26goyal/python-setuptools.git@master
-```
-
-This will do the following:
-* Download the source code into a temp directory
-* Create a wheel distribution.
-* install the created wheel using pip command.
-* Done.
-```
-(venv) ➜ pip install git+https://github.com/rahul26goyal/python-setuptools.git@master
- ...
-  Cloning https://github.com/rahul26goyal/python-setuptools.git (to revision master) to /pri/tmpd-t0Zi_0
-...
-Building wheels for collected packages: rahulg-test-tool
-Building wheel for rahulg-test-tool (setup.py) ... done
-Created wheel for rahulg-test-tool: filename=rahulg_test_tool-0.1-py2-none-any.whl size=5729 sha256=c52cea
-Stored in directory: /private/var/folders/d8/xp6v/T/pip-ephem-wheel-cache-KIWzy3/wheels/30/f9/fb/5b41832c7f7bed
-Successfully built rahulg-test-tool
-Installing collected packages: rahulg-test-tool
-Successfully installed rahulg-test-tool-0.1
+pip install --upgrade build
 ```
 
-
-### To Create a Source Distribution Package:
+**Generate the Build Distribution packages**
+Once the configuration is completed, it straight forward to generate the artifact,
+```python
+python -m build
 ```
-python setup.py sdist
+```python
+(setuptool-dev) ➜  python-setuptools git:(setuptool2) ✗ ls dist 
+rahulg_package-1.1-py3-none-any.whl  # wheel file  
+rahulg_package-1.1.tar.gz  # source tar file.
 ```
-This produced 2 Outputs:
-  * `dist` folder where the tar.gz file is created.
-  * `<prodect-name.egg-info>` folder with its files.
-  * the tarball does not include the dependencies.
-  
-To install a source distribution zip, do the following:
-  ```
-  (venv)✗ pip install ./dist/rahulg-test-tool-0.1.tar.gz 
-  
-  (venv)✗ ls ./venv/lib/python2.7/site-packages/rahulg
-rahulg/                          rahulg_test_tool-0.1.dist-info/
-  ```
-
-### To create a wheel distribution:
-```
- python setup.py bdist_wheel --universal
- ```
- 
- This will create a `<package-name>-<>.whl` file inside `dist` which can be uploaded to pypi or installed.
- 
- To Install the wheel:
- ```
- (venv) ➜ pip install ./dist/rahulg_test_tool-0.1-py2.py3-none-any.whl 
- 
-DEPRECATION: Python 2.7 reached the end of its life on January 1st, 2020. Please upgrade your Python as Python 2.7 is no longer maintained. A future version of pip will drop support for Python 2.7. More details about Python 2 support in pip, can be found at https://pip.pypa.io/en/latest/development/release-process/#python-2-support
-Processing ./dist/rahulg_test_tool-0.1-py2.py3-none-any.whl
-Installing collected packages: rahulg-test-tool
-Successfully installed rahulg-test-tool-0.1
-```
+****
+****
 
 
-### To create a standalone package for this repo with all its dependencies
+## Uploading the package to testpypi repository 
 
-* include package.py file
-* include MANIFEST.in file.
-* include the install time dependencies into requirements.txt
-* uncomment `cmdclass={ "package": Package },` line in setup.py to use the package.py utility.
-* To create the package: 
+We will use `twine` utility to upload the python distribution. 
+https://twine.readthedocs.io/en/stable/index.html
+https://packaging.python.org/en/latest/guides/using-testpypi/
+- Created a account in the test pypi repository 
+
+**Install twine**
 ```
-(venv)✗ python setup.py package
+pip install twine
+```
+**Upload to pypi**
+```python
+twine upload -r testpypi dist/*
+```
+**Testing the install**
+
+```python
+pip install -i https://test.pypi.org/simple/ rahulg-package
 ```
 
-It does the following:
-* create a wheelhouse for the dependencies specified in requirements.txt file.
-```
-running package
-Packing requirements.txt into wheelhouse
-Running shell command: %s rm -rf wheelhouse
-Running shell command: %s mkdir -p wheelhouse
-Running shell command: %s pip wheel --wheel-dir=wheelhouse -r requirements.txt
-```
+## Other installs and testing
+```python
+(setuptool-dev) ➜  python-setuptools git:(setuptool2) ✗ pip list
+Package             Version
+------------------- --------
+build               1.1.1
+certifi             2024.2.2
+charset-normalizer  3.3.2
+docutils            0.20.1
+idna                3.6
+importlib_metadata  7.0.2
+importlib_resources 6.3.2
+jaraco.classes      3.3.1
+keyring             24.3.1
+markdown-it-py      3.0.0
+mdurl               0.1.2
+more-itertools      10.2.0
+nh3                 0.2.15
+packaging           24.0
+pip                 24.0
+pkginfo             1.10.0
+Pygments            2.17.2
+pyproject_hooks     1.0.0
+rahulg_package      1.1
+readme_renderer     43.0
+requests            2.31.0
+requests-toolbelt   1.0.0
+rfc3986             2.0.0
+rich                13.7.1
+setuptools          69.2.0
+tomli               2.0.1
+twine               5.0.0
+typing_extensions   4.10.0
+urllib3             2.2.1
+wheel               0.42.0
+zipp                3.18.1
 
-* all the wheel files are downloaded for the dependencies into `wheelhouse` directory and then moved to `dist/.tar.` zip file.
-
-To test:
-* Disconnect from internet.
-* do a `pip list` and make sure that `requests` package is not
- present.
- ```
- (venv)✗ pip list
-pip        20.0.2    
-setuptools 44.1.0    
-urllib3    1.24.3    
-wheel      0.34.2 
- 
- ```
-* untar the created `dixt/*tar.gz` in some folder and `cd <>`
-```
-tar zxf rahulg-test-tool-0.1.tar.gz
-cd rahulg-test-tool-0.1
-ls wheelhouse
-```
-* try installing the dependencies using pip
-```
- pip install -r requirements.txt  --no-index --find-links wheelhouse
- ```
-* do a `pip list` again to see that `requests` package is present in the virtual env with all its dependencies.
-```
-(venv)✗ pip list
-certifi    2019.11.28
-chardet    3.0.4     
-idna       2.8       
-pip        20.0.2    
-requests   2.21.0    
-setuptools 44.1.0    
-urllib3    1.24.3    
-wheel      0.34.2 
 ```
